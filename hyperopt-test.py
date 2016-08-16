@@ -21,9 +21,48 @@ phenotypeSpace = [
 			hp.uniform('max_weight', 0, 100),
 			hp.uniform('min_weight', -100, 0),
 			hp.quniform('feedforward', 0, 1, 1),
-			hp.uniform('weight_stdev', 0, 60)
+			hp.uniform('weight_stdev', 0, 60),
+			
+			hp.quniform('pop_size', 20, 100, 1),
+			
+			hp.uniform('prob_add_conn',0, 1),
+			hp.uniform('prob_add_node',0, 1),
+			hp.uniform('prob_delete_conn',0, 1),
+			hp.uniform('prob_delete_node',0, 1),
+			hp.uniform('prob_mutate_bias',0, 1),
+			hp.uniform('bias_mutation_power',0, 1),
+			hp.uniform('prob_mutate_response',0, 1),
+			hp.uniform('response_mutation_power',0, 1),
+			hp.uniform('prob_mutate_weight',0, 1),
+			hp.uniform('prob_replace_weight',0, 1),
+			hp.uniform('weight_mutation_power',0, 1),
+			hp.uniform('prob_mutate_activation',0, 1),
+			hp.uniform('prob_toggle_link',0, 1),
+
+			hp.uniform('compatibility_threshold', 0, 100),
+			hp.uniform('excess_coefficient', 0, 100),
+			hp.uniform('disjoint_coefficient', 0, 100),
+			hp.uniform('weight_coefficient', 0, 100),
+
+			hp.quniform('max_stagnation', 0, 100, 1),
+
+			hp.quniform('elitism', 0, 100, 1),
+			hp.uniform('survival_threshold', 0, 1)
+
+			hp.uniform('pos_x', -100, 100)
+			hp.uniform('pos_y', -100, 100)
+			hp.uniform('vel_x', -100, 100)
+			hp.uniform('vel_y', -100, 100)
+			hp.uniform('angle', -100, 100)
+			hp.uniform('angle_vel', -100, 100)
+			hp.uniform('leg_one', -100, 100)
+			hp.uniform('leg_two', -100, 100)
+			hp.uniform('total_frames', -100, 100)
+			hp.uniform('fuel_use', -100, 100)
+			hp.uniform('reward', -100, 100)
 			]
 
+fitness_weights = []
 average_fitnesses = []
 def eval_fitness(genomes):
 	fitnesses = []
@@ -70,8 +109,9 @@ def eval_fitness(genomes):
 	print(average_fitnesses)
 
 def adjustPhenotypes(args):
+	fitness_weights[:] = []
 	average_fitnesses[:] = []
-	hidden_nodes, max_weight, min_weight, feedforward, weight_stdev = args
+	hidden_nodes, max_weight, min_weight, feedforward, weight_stdev, pop_size, prob_add_conn, prob_add_node, prob_delete_conn, prob_delete_node, prob_mutate_bias, bias_mutation_power, prob_mutate_response, response_mutation_power, prob_mutate_weight, prob_replace_weight, weight_mutation_power, prob_mutate_activation, prob_toggle_link, compatibility_threshold, excess_coefficient, disjoint_coefficient, weight_coefficient, max_stagnation, elitism, survival_threshold = args
 
 	pop = population.Population(config_path)
 	
@@ -81,7 +121,29 @@ def adjustPhenotypes(args):
 	pop.config.feedforward = feedforward
 	pop.config.weight_stdev = weight_stdev
 
-	pop = population.Population(config_path)
+	pop.config.pop_size = pop_size
+	pop.config.prob_add_conn = prob_add_conn
+	pop.config.prob_add_node = prob_add_node
+	pop.config.prob_delete_conn = prob_delete_conn
+	pop.config.prob_delete_node = prob_delete_node
+	pop.config.prob_mutate_bias = prob_mutate_bias
+	pop.config.bias_mutation_power = bias_mutation_power
+	pop.config.prob_mutate_response = prob_mutate_response
+	pop.config.response_mutation_power = response_mutation_power
+	pop.config.prob_mutate_weight = prob_mutate_weight
+	pop.config.prob_replace_weight = prob_replace_weight
+	pop.config.weight_mutation_power = weight_mutation_power
+	pop.config.prob_mutate_activation = prob_mutate_activation
+	pop.config.prob_toggle_link = prob_toggle_link
+	pop.config.compatibility_threshold = compatibility_threshold
+	pop.config.excess_coefficient = excess_coefficient
+	pop.config.disjoint_coefficient = disjoint_coefficient
+	pop.config.weight_coefficient = weight_coefficient
+	pop.config.max_stagnation = max_stagnation
+	pop.config.elitism = elitism
+	pop.config.survival_threshold = survival_threshold
+
+	#pop = population.Population(config_path)
 	pop.run(eval_fitness, 10)
 
 	change_in_average_fitnesses = [j-i for i, j in zip(average_fitnesses[:-1], average_fitnesses[1:])]
